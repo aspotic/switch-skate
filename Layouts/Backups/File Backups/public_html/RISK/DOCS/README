@@ -1,0 +1,86 @@
+// PHP RiSK -- README //
+
+
+Overview :
+~~~~~~~~~~
+
+This is a PHP/MySQL Risk game that was designed with simplicity in mind. The
+interface is very crude and basic and is this way for 2 reasons.
+
+1) It was easier/faster.
+2) I'm not a graphic artist.
+
+If anyone wants to recode the front end to something nice, please do so and
+send me the work, I'll be happy to add the modifications in the next release,
+credited of course.
+
+
+Rules :
+~~~~~~~
+
+Very simple : Same as Risk. 
+
+I try to re-create all the rules present in the current edition of the original
+Risk board game. If I missed any rules, send me an e-mail and it will be
+corrected in the next release.
+
+
+Bugs :
+~~~~~~
+
+- Sometimes after taking over a country, the screen will not redirect back to
+the attack window. The work around is to make sure you wait a few seconds after
+the frames load before clicking buttons (to let the invisible frames load).
+I believe this is fixed now but if it happens again, let me know. If it does
+happen, try to refresh the window. 
+
+- The which-country-can-attack-which-country may have a few mistakes (for
+example, the game might say you can't attack the country when you should be
+able to or vice-versa). This happens because there are a lot of countries and I
+had to manually put in which country can attack which. I might have missed a
+few. You can fix this by editing the BORDERS entry in the risk_countries table,
+but don't just fix it, let me know which ones to fix!
+
+- I have seen random Internet Explorer crashes while playing, but no other
+player that I have tested with has received these. If you see them, please let
+me know what you were doing when it happened and if you were an admin or not.
+
+
+To Do :
+~~~~~~~
+
+- Security features are lacking. It's not really a bug, I just didn't think it
+was necessary to add more since I mainly made this to play with friends. If you
+are going to deploy this on a large scale, you might want to add more security
+features. They will be implemented eventually.
+
+- The code is very, very raw and primitive, hardly professional. That's because
+I wanted to get the core done so that we could play it. The code will be
+optimized, piece by piece. I'm considering a PHP5 final product but still
+undecided. 
+
+- The interface is also very raw. That's just because I suck as a graphic
+artist. If you can recode the layout nicely, please hack my code to pieces or
+send me an HTML-only example, I would be delighted to add it.
+
+- Support for multiple games on one server
+
+- Map Loader module (play using different maps/themes)
+
+- Change tunnels to be more seamless (refreshes less visible)
+
+- Use a more object based code. This will most likely be implemented when PHP5
+is released as a stable version.
+
+
+Other Notes :
+~~~~~~~~~~~~~
+
+If you spot anything else that needs to be touched up, please contact me. This
+game is an ongoing project and I won't just discard it in a few weeks, I am
+always working on it.
+
+
+-- TheWulf
+
+E-mail/MSN : m2mwulf@msn.com

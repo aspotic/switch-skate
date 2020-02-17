@@ -1,0 +1,35 @@
+/*
+	SHOP HACK v1.3 by NFPUNK/FLIXON
+
+	If you require support please post in the forum
+	at www.flixon.com/shop/forum.  Thanks
+
+	- nfpunk/Flixon
+*/
+
+CHANGE LOG:
+===========
+
+1.3
+- A better way of previewing name
+- All the known bugs from the bugs forum fixed
+- Auction items removed due to it being a mess but will become part of the auction hack
+- Works with new xmb 1.9.1 new coding standards
+- The bank has had a bit of a makeover
+- The access rights for who can add/view/delete cats etc has been remodified
+- Ability to remove passwords for categories
+
+1.2
+- Added the bank
+- Removed comments as unable to determine whether secure and not used much
+- Shop stats
+- All the bugs found have been fixed
+- Updated alot of the code
+- Added text next to all the links
+- Completely dependent on the UID field now
+- Changed navigation to work with sub cats
+- Option to have cats where when an item is sold the item owner receives the money
+- Preview name when changing colour
+
+1.1 and below
+Did not keep any records of the changes made sorry.

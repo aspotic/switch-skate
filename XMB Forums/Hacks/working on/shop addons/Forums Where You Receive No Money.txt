@@ -1,0 +1,120 @@
+Description: This addon will allow you to specify whether you wish to have certain forums where no money is awarded for posting.  To turn this on/off for a forum goto the admin control panel then forums and click more options next to the relative forum and simply make the change.
+
+Compatibility: XMB v1.9.1 Final
+
+Code Designed By: nfpunk/Flixon
+
+* Insert Raw SQL (http://yourboardurl/cp.php?action=upgrade)
+--------------------------------------------------------------------------------
+ALTER TABLE $table_forums ADD awardmoney char(3) NOT NULL default 'yes';
+--------------------------------------------------------------------------------
+
+* Edit cp.php
+
+FIND
+--------------------------------------------------------------------------------
+if ($forum['guestposting'] == "on" || $forum['guestposting'] == "yes") {
+    $checked8 = "checked";
+} else {
+    $checked8 = "";
+}
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+if($forum['awardmoney'] == "yes") {
+    $checked9 = "checked";
+} else {
+    $checked9 = "";
+}
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+<input type="checkbox" name="guestpostingnew" value="on" <?php echo $checked8?> /><?php echo $lang['textanonymousposting']?><br />
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+<input type="checkbox" name="awardmoneynew" value="yes" <?php echo $checked9?> /><?php echo $lang['shop_textawardmoney']?><br />
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_forums
+--------------------------------------------------------------------------------
+
+ADD TO END JUST BEFORE WHERE fid='$fdetails'");
+--------------------------------------------------------------------------------
+, awardmoney='$awardmoneynew'
+--------------------------------------------------------------------------------
+
+* Edit post.php
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1, money=money+'$ssettings[mpt]' WHERE username like '$username'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1 WHERE username like '$username'");
+
+if($forums['awardmoney'] == "yes") {
+	$db->query("UPDATE $table_members SET money=money+'$ssettings[mpt]' WHERE username like '$username'");
+}
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1, money=money+'$ssettings[mpp]' WHERE username='$username'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1 WHERE username='$username'");
+
+if($forums['awardmoney'] == "yes") {
+	$db->query("UPDATE $table_members SET money=money+'$ssettings[mpp]' WHERE username='$username'");
+}
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[spd]' WHERE username='$orig[author]'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$orig[author]'");
+
+if($forums['awardmoney'] == "yes") {
+	$db->query("UPDATE $table_members SET money=money-'$ssettings[spd]' WHERE username='$orig[author]'");
+}
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+if($isfirstpost['pid'] == $result['pid']) {
+	$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[std]' WHERE username='$result[author]'");
+} else {
+	$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[spd]' WHERE username='$result[author]'");
+}
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+if($isfirstpost['pid'] == $result['pid']) {
+	$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$result[author]'");
+
+	if($forums['awardmoney'] == "yes") {
+		$db->query("UPDATE $table_members SET money=money-'$ssettings[std]' WHERE username='$result[author]'");
+	}
+} else {
+	$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$result[author]'");
+
+	if($forums['awardmoney'] == "yes") {
+		$db->query("UPDATE $table_members SET money=money-'$ssettings[spd]' WHERE username='$result[author]'");
+	}
+}
+--------------------------------------------------------------------------------

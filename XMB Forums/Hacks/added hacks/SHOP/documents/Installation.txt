@@ -1,0 +1,329 @@
+/*
+	SHOP HACK v1.3 by NFPUNK/FLIXON
+
+	If you require support please post in the forum
+	at www.flixon.com/shop/forum.  Thanks
+
+	- nfpunk/Flixon
+*/
+
+INSTALLATION:
+=============
+
+* Unzip the zip file to a folder.
+
+* Upload English.shop.php to your "lang" directory.
+
+* Upload the other php files and templates2.xmb to your xmb directory.
+
+* Upload the "shop" folder to your forum "images" directory.
+
+* Edit header.php
+
+FIND
+--------------------------------------------------------------------------------
+$tables = array('attachments', ...
+--------------------------------------------------------------------------------
+
+ADD TO END JUST BEFORE );
+--------------------------------------------------------------------------------
+, 'member_items', 'shop_bank', 'shop_cats', 'shop_items', 'shop_settings', 'shop_votes'
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+require ROOT."lang/$langfile.lang.php";
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+require ROOT."lang/$langfile.shop.php";
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+if ( $SETTINGS['stats'] == "on") {
+    $links[] = "<img src=\"$imgdir/stats.gif\" alt=\"$lang[altstats]\" border=\"0\" /> <a href=\"stats.php\"><font class=\"navtd\">$lang[navstats]</font></a>";
+}
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+$links[] = "<a href=\"shop.php\"><font class=\"navtd\">$lang[shop_title]</font></a>"; // Edit $lang['shop_title'] in English.shop.php to change title
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+?>
+--------------------------------------------------------------------------------
+
+ADD ABOVE
+--------------------------------------------------------------------------------
+// Interest Payment
+
+$bank_lastdate = explode('|', $bank_lastdate);
+
+$bank_yearnow = gmdate("Y", time() + ($addtime * 3600));
+$bank_monnow = gmdate("m", time() + ($addtime * 3600));
+$bank_mdaynow = gmdate("j", time() + ($addtime * 3600));
+$bank_hournow = gmdate("H", time() + ($addtime * 3600));
+
+if($bank_lastdate['2'] < $bank_yearnow || $bank_lastdate['1'] < $bank_monnow || $bank_lastdate['0'] < $bank_mdaynow) {
+	if($bank_hour == $bank_hournow) {
+		$query = $db->query("SELECT uid, bank_balance FROM $table_members WHERE bank_balance > 0");
+
+		while($bank_member = $db->fetch_array($query)) {
+			$bank_balance = ((100 + $bank_interest) / 100) * $bank_member['bank_balance'];
+
+			$db->query("UPDATE $table_members SET bank_balance='$bank_balance' WHERE uid='$bank_member[uid]'");
+		}
+
+		$db->free_result($query);
+
+		$bank_lastdate = "$bank_mdaynow|$bank_monnow|$bank_yearnow";
+
+		$db->query("UPDATE $table_settings SET bank_lastdate='$bank_lastdate'");
+	}
+}
+--------------------------------------------------------------------------------
+
+* Edit member.php
+
+FIND
+--------------------------------------------------------------------------------
+if ($memberinfo['site'] != 'http://') {
+    $site = $memberinfo['site'];
+} else {
+    $site = '';
+}
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($memberinfo['hexcolor'] == "") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$memberinfo[hexcolor]";
+	$hexcolor2 = "color:#$memberinfo[hexcolor]";
+}
+
+if($memberinfo['glowcolor'] == "") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font style=\"width:100%; $hexcolor2; filter:glow(color=#$memberinfo[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$memberinfo[username]$span2";
+
+if($memberinfo['pphoto'] == "") {
+	$pphoto = "";
+} else {
+	eval("\$pphoto = \"".template("member_profile_pphoto")."\";");
+}
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+* Edit post.php
+
+FIND
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT * FROM $table_forums WHERE fid='$fid'");
+$forums = $db->fetch_array($query);
+--------------------------------------------------------------------------------
+
+ADD ABOVE
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT * FROM $table_shop_settings");
+$ssettings = $db->fetch_array($query);
+$db->free_result($query);
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1 WHERE username like '$username'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1, money=money+'$ssettings[mpt]' WHERE username like '$username'");
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1 WHERE username='$username'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum+1, money=money+'$ssettings[mpp]' WHERE username='$username'");
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$orig[author]'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[spd]' WHERE username='$orig[author]'");
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT author FROM $table_posts WHERE tid='$tid'");
+while($result = $db->fetch_array($query)) {
+	$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$result[author]'");
+}
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT pid, author FROM $table_posts WHERE tid='$tid'");
+while($result = $db->fetch_array($query)) {
+	if($isfirstpost['pid'] == $result['pid']) {
+		$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[std]' WHERE username='$result[author]'");
+	} else {
+		$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[spd]' WHERE username='$result[author]'");
+	}
+}
+--------------------------------------------------------------------------------
+
+* Edit topicadmin.php
+
+FIND
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT author FROM $table_posts WHERE tid='$tid'");
+--------------------------------------------------------------------------------
+
+ADD ABOVE
+--------------------------------------------------------------------------------
+$query = $db->query("SELECT std FROM $table_shop_settings");
+$ssettings = $db->fetch_array($query);
+$db->free_result($query);
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1 WHERE username='$result[author]'");
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members SET postnum=postnum-1, money=money-'$ssettings[std]' WHERE username='$result[author]'");
+--------------------------------------------------------------------------------
+
+* Edit viewthread.php
+
+FIND
+--------------------------------------------------------------------------------
+if ($post['author'] != "Anonymous") {
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($post['hexcolor'] == "") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$post[hexcolor]";
+	$hexcolor2 = "color:#$post[hexcolor]";
+}
+
+if($post['glowcolor'] == "") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font	style=\"width:100%; $hexcolor2; filter:glow(color=#$post[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$post[username]$span2";
+
+$money = "<br />$lang[shop_currency]: $post[money]<br />";
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$post['author'] = $lang['textanonymous'];
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$post['author'] = $lang['textanonymous'];
+$username = $lang['textanonymous'];
+$money = 'N/A';
+--------------------------------------------------------------------------------
+
+* Edit member_profile template
+
+FIND
+--------------------------------------------------------------------------------
+$memberinfo[username]
+--------------------------------------------------------------------------------
+
+REPLACE WITH (only on 1st occassion)
+--------------------------------------------------------------------------------
+$username
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+<tr>
+<td bgcolor="$altbg1" class="tablerow" width="22%">$lang[textsite]</td>
+<td bgcolor="$altbg2" class="tablerow"><a href="$site" target="_blank">$site</a></td>
+</tr>
+--------------------------------------------------------------------------------
+
+ADD BELOW (Note if you're familiar with php and/or the xmb code then you may wish to put this somewhere else)
+--------------------------------------------------------------------------------
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[shop_currency]:</td>
+<td bgcolor="$altbg2" class="tablerow">$memberinfo[money]</td>
+</tr>
+
+$pphoto
+--------------------------------------------------------------------------------
+
+* Edit viewthread_post template
+
+FIND
+--------------------------------------------------------------------------------
+$post[author]
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+$username
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$location
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+$money
+--------------------------------------------------------------------------------
+
+* Run install.php and click "Accept".
+
+* Delete install.php, upgrade.php & templates2.xmb after installation.
+
+* Create 3 directories "pphotos", "avatars" (if already exists use that one) & "items" inside the "images" directory and chmod set them to 777.
+
+* Now check the addons directory for additions you can add. NOTE: items purchased with not appear in posts until you've done the appropriate addon.
+
+* Also NOTE: This hack is dependent on the member uid field so please do not apply the fix uid if using this hack.
+
+* That's it!

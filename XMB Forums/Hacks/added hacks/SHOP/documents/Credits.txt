@@ -1,0 +1,35 @@
+/*
+	SHOP HACK v1.3 by NFPUNK/FLIXON
+
+	If you require support please post in the forum
+	at www.flixon.com/shop/forum.  Thanks
+
+	- nfpunk/Flixon
+*/
+
+CREDITS:
+========
+
+Developer:
+----------
+nfpunk/Flixon
+lee@punkcentre.com
+
+Testers:
+--------
+nfpunk/Flixon
+lee@punkcentre.com
+
+Phoebe Nichole
+WormHole
+Nickpledge
+
+Buttons:
+--------
+Phoebe Nichole
+
+Special Thanks To:
+------------------
+Fisico
+FunForum
+MuNKs

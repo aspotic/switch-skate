@@ -1,0 +1,63 @@
+/*
+	SHOP HACK v1.3 by NFPUNK/FLIXON
+
+	If you require support please post in the forum
+	at www.flixon.com/shop/forum.  Thanks
+
+	- nfpunk/Flixon
+*/
+
+VERSION:
+--------
+Shop Hack v1.3
+
+WEBSITE:
+--------
+http://www.flixon.com/shop
+
+DESCRIPTION:
+------------
+Each member is given an amount of money which is increased by posting.  They can
+then purchase extra things from the shop.
+
+COMPATIBILITY:
+--------------
+XMB v1.9.1 Final
+
+INFO:
+-----
+This is a hack made for XMB (http://www.xmbforum.com)
+
+NOTE:
+-----
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+http://www.gnu.org/copyleft/gpl.html
+
+Items purchased with not appear in posts until you've done the appropriate addon.
+
+This hack is dependent on the member uid field so please do not apply the fix
+uid if using this hack.
+
+Thanks
+- nfpunk/Flixon
+
+INSTALLATION/UPGRADE:
+---------------------
+- Make a backup of your files.
+- Open up the relative file - Upgrade or Installation.
+- Follow the instructions in the file.
+
+CONTACT:
+--------
+If you have any problems or you have found a bug, please post on the following forum:
+
+- www.flixon.com/shop/forum

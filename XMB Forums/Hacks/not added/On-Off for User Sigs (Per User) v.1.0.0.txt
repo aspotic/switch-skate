@@ -1,0 +1,342 @@
+TITLE:
+ - On/Off for User's Signatures (a.k.a. Sigs) [Per User Option]
+
+RELEASE VERSION:
+ - 1.0.0
+
+RELEASE DATE:
+ - 16 August 2004; 12:21PM (CST)
+
+COMPATIBILITY:
+ - XMB v.1.9.1 (RC1)
+ - XMB v.1.9 Final [should work]
+ - XMB v.1.9 (beta) [possibly]
+
+CODE DESIGNER:
+ - Jonathon of JDMnet ( jonathon@jdmnet.org | www.jdmnet.org )
+
+COPYRIGHT:
+ - Let the author (me, Jonathon) know when you post this mod on other forums for downloading
+
+DESCRIPTION:
+ - Allows for each user to decide weather they would like to see other people's sigs (signatures) or not.
+   They will still be able to edit signatures; but they may/may not show up within the posts themselves.
+
+NOTES:
+ - Backup all templates, PHP files, and the database BEFORE proceeding.
+ - This version is specificaly for 1.9 and not any previous version of XMB
+ - The long dashes are NOT part of the mod unless otherwise stated; the are there merely for seperation of the lines.
+ - This directions are based on a default/un-moddified XMB; some instructions may very if you have moddified your forums any.
+ 
+ - By default the option is turned "on" so sigs will show until you manual set it to "off" through your personal control panel.
+
+
+
+--==// STEP 1 //==--
+
+A] GO INTO YOUR ADMIN PANEL AND TO THE "Insert Raw SQL" SECTION; PUT THE FOOLIWNG IN THE BOX:
+
+------------------------------------------------------------------------------------
+
+ALTER TABLE `$table_members` ADD `usersig` CHAR(3) DEFAULT 'yes' NOT NULL;
+
+------------------------------------------------------------------------------------
+
+B] SUBMIT CHANGES
+
+
+
+--// STEP 2 //==--
+
+A] OPEN "memcp.php" FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+        $checked = '';
+        if($member['showemail'] == "yes") {
+            $checked = "checked=\"checked\"";
+        }
+
+------------------------------------------------------------------------------------
+
+C] ABOVE THAT LINE; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+// Added in for On/Off for User's Signatures [Per User Option] -- start
+$usersig_check = '';
+if($member['usersig'] == 'yes') {
+    $usersig_check = "checked=\"checked\"";
+}
+// Added in for On/Off for User's Signatures [Per User Option] -- end
+
+------------------------------------------------------------------------------------
+
+D] FIND:
+
+------------------------------------------------------------------------------------
+
+$showemail = ( isset($showemail) && $showemail == "yes" ) ? "yes" : "no";
+
+------------------------------------------------------------------------------------
+
+E] BELOW THAT LINE; ADD THE FOLLOWING
+
+------------------------------------------------------------------------------------
+
+// Added in for On/Off for User's Signatures [Per User Option] -- start
+$usersig = ( isset($usersig) && $usersig == 'yes' ) ? 'yes' : 'no';
+// Added in for On/Off for User's Signatures [Per User Option] -- end
+
+------------------------------------------------------------------------------------
+
+F] FIND:
+
+------------------------------------------------------------------------------------
+
+$db->query("UPDATE $table_members SET 
+
+------------------------------------------------------------------------------------
+
+G] AT THE END OF THAT LINE; FIND:
+
+------------------------------------------------------------------------------------
+
+ WHERE username='$xmbuser'");
+
+------------------------------------------------------------------------------------
+
+H] BEFORE THAT; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+, usersig='$usersig' 
+
+------------------------------------------------------------------------------------
+
+I] SAVE CHANGES
+
+
+
+--==// STEP 3 //==--
+
+A] OPEN "viewthread.php" FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+        if($post['usesig'] == "yes") {
+            $post['sig'] = postify($post['sig'], 'no', 'no', $forum['allowsmilies'], $SETTINGS['sightml'], $SETTINGS['sigbbcode'], $forum['allowimgcode'], false);
+            eval("\$post['message'] .= \"".template('viewthread_post_sig')."\";");
+        } else {
+            eval("\$post['message'] .= \"".template('viewthread_post_nosig')."\";");
+        }
+
+------------------------------------------------------------------------------------
+
+C] REPLACE THAT; WITH THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+// Added in for On/Off for User's Signatures [Per User Option] -- start
+if ( $self['usersig'] == 'yes' ) {
+    if ( $post['usesig'] == 'yes' ) {
+        $post['sig'] = postify($post['sig'], 'no', 'no', $forum['allowsmilies'], $SETTINGS['sightml'], $SETTINGS['sigbbcode'], $forum['allowimgcode'], false);
+        eval("\$post['message'] .= \"".template('viewthread_post_sig')."\";");
+    } else {
+        eval("\$post['message'] .= \"".template('viewthread_post_nosig')."\";");
+    }
+} else {
+    eval("\$post['message'] .= \"".template('viewthread_post_nosig')."\";");
+}
+// Added in for On/Off for User's Signatures [Per User Option] -- end
+
+------------------------------------------------------------------------------------
+
+D] SAVE CHANGES
+
+
+
+--==// STEP 4 //==--
+
+A] OPEN YOUR LANG FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+?>
+
+------------------------------------------------------------------------------------
+
+C] ABOVE THAT LINE; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+// Added in for On/Off for User's Signatures [Per User Option] -- start
+$lang['usersigs_show'] = "View member's signatures?";
+$lang['usersigs_show2'] = "checking this to display signatures in posts";
+// Added in for On/Off for User's Signatures [Per User Option] -- end
+
+------------------------------------------------------------------------------------
+
+D] SAVE CHANGES
+
+
+
+--==// STEP 5 //==--
+
+A] OPEN "member.php" FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+        if($showemail != "yes") {
+            $showemail = "no";
+        }
+
+------------------------------------------------------------------------------------
+
+C] ABOVE THOSE LINES; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+// Added in for On/Off for User's Signatures [Per User Option] -- start
+if ( $usersig != 'yes' ) {
+    $usersig == 'no'
+}
+// Added in for On/Off for User's Signatures [Per User Option] -- end
+
+------------------------------------------------------------------------------------
+
+D] FIND:
+
+------------------------------------------------------------------------------------
+
+$db->query("INSERT INTO $table_members 
+
+------------------------------------------------------------------------------------
+
+E] NOW, ON THE SAME LINE; OR WITHIN A COUPLE OF LINES (IF YOU ARE USING THE LATEST 1.9.1 (RC) FILES); FIND:
+(SHOULD BE AT THE END OF THE LINE(S))
+
+------------------------------------------------------------------------------------
+
+)");
+
+------------------------------------------------------------------------------------
+
+F] REPLACE THAT, WITH THE FOLLOWING:
+
+
+------------------------------------------------------------------------------------
+
+, '$usersig')");
+
+------------------------------------------------------------------------------------
+
+[ only do the next two steps if you are running 1.9.1 (rc1); if you arent - skip to the next STEP ]
+
+    E.b] !! ONLY DO THIS STEP IF YOU LINE YOU JUST FOUND IS ON THREE LINES. !!
+    
+    FIND (SHOULD BE THE MIDDLE LINE OF THE THREE):
+    
+    ------------------------------------------------------------------------------------
+    
+    webcam )
+    
+    ------------------------------------------------------------------------------------
+    
+    E.c] !! ONLY DO THIS STEP IF YOU LINE YOU JUST FOUND IS ON THREE LINES. !!
+    
+    REPLACE THAT WITH THE FOLLOWING:
+    
+    ------------------------------------------------------------------------------------
+    
+    webcam, usersig )
+    
+    ------------------------------------------------------------------------------------
+
+
+
+--==// STEP 6 //==--
+
+A] OPEN "memcp_profile" TEMPLATE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[memcpmood]</td>
+<td bgcolor="$altbg2" class="tablerow"><input type="text" name="newmood" size="30" value="$member[mood]" /></td>
+</tr>
+
+------------------------------------------------------------------------------------
+
+C] BELOW THOSE LINES; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+<!-- Added in for On/Off for User's Signatures [Per User Option] (start) -->
+<tr>
+ <td bgcolor="$altbg1" class="tablerow">$lang[usersigs_show]</td>
+ <td bgcolor="$altbg2" class="tablerow"><input type="checkbox" name="usersig" value="yes" $usersig_check /> $lang[usersigs_show2]</td>
+</tr>
+<!-- Added in for On/Off for User's Signatures [Per User Option] (end) -->
+
+------------------------------------------------------------------------------------
+
+D] SUBMIT CHANGES
+
+
+
+--==// STEP 7 //==--
+
+A] OPEN "member_reg" TEMPLATE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[memcpmood]</td>
+<td bgcolor="$altbg2" class="tablerow"><input type="text" name="newmood" size="30" value="" /></td>
+</tr>
+
+------------------------------------------------------------------------------------
+
+C] BELOW THOSE LINES; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+<!-- Added in for On/Off for User's Signatures [Per User Option] (start) -->
+<tr>
+ <td bgcolor="$altbg1" class="tablerow">$lang[usersigs_show]</td>
+ <td bgcolor="$altbg2" class="tablerow"><input type="checkbox" name="usersig" value="yes" /> $lang[usersigs_show2]</td>
+</tr>
+<!-- Added in for On/Off for User's Signatures [Per User Option] (end) -->
+
+------------------------------------------------------------------------------------
+
+D] SUBMIT CHANGES
+
+
+--==// STEP 8 //==--
+
+A] NOW UPLOAD THE CHANGED FILES; WHICH ARE:
+
+ - YOUR LANG FILE
+ - member.php
+ - memcp.php
+ - post.php
+ - viewthread.php
+
+
+
+
+That's it! Enjoy.

@@ -1,0 +1,216 @@
+Description: This addon will allow you to turn off certain features you purchased in the shop when editing your profile.
+
+Note: This was built in to Shop v1.2 and below.
+
+Compatibility: XMB v1.9.1 Final
+
+Code Designed By: nfpunk/Flixon
+
+* Insert Raw SQL (http://yourboardurl/cp.php?action=upgrade)
+--------------------------------------------------------------------------------
+ALTER TABLE $table_members ADD glowcolorstatus char(3) NOT NULL default 'on', ADD hexcolorstatus char(3) NOT NULL default 'on', ADD pphotostatus char(3) NOT NULL default 'on';
+--------------------------------------------------------------------------------
+
+* Edit member.php
+
+FIND
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($memberinfo['hexcolor'] == "") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$memberinfo[hexcolor]";
+	$hexcolor2 = "color:#$memberinfo[hexcolor]";
+}
+
+if($memberinfo['glowcolor'] == "") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font style=\"width:100%; $hexcolor2; filter:glow(color=#$memberinfo[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$memberinfo[username]$span2";
+
+if($memberinfo['pphoto'] == "") {
+	$pphoto = "";
+} else {
+	eval("\$pphoto = \"".template("member_profile_pphoto")."\";");
+}
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($memberinfo['hexcolor'] == "" || $memberinfo['hexcolorstatus'] == "off") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$memberinfo[hexcolor]";
+	$hexcolor2 = "color:#$memberinfo[hexcolor]";
+}
+
+if($memberinfo['glowcolor'] == "" || $memberinfo['glowcolorstatus'] == "off") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font style=\"width:100%; $hexcolor2; filter:glow(color=#$memberinfo[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$memberinfo[username]$span2";
+
+if($memberinfo['pphoto'] == "" || $memberinfo['pphotostatus'] == "off") {
+	$pphoto = "";
+} else {
+	eval("\$pphoto = \"".template("member_profile_pphoto")."\";");
+}
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+* Edit memcp.php
+
+FIND
+--------------------------------------------------------------------------------
+$member = $self;
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($member['glowcolorstatus'] == "on") {
+	$glowcoloroff = "";
+	$glowcoloron = "selected";
+} else {
+	$glowcoloroff = "selected";
+	$glowcoloron = "";
+}
+
+if($member['hexcolorstatus'] == "on") {
+	$hexcoloroff = "";
+	$hexcoloron = "selected";
+} else {
+	$hexcoloroff = "selected";
+	$hexcoloron = "";
+}
+
+if($member['pphotostatus'] == "on") {
+	$pphotooff = "";
+	$pphotoon = "selected";
+} else {
+	$pphotooff = "selected";
+	$pphotoon = "";
+}
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+FIND
+--------------------------------------------------------------------------------
+$db->query("UPDATE $table_members
+--------------------------------------------------------------------------------
+
+ADD TO END OF STATEMENT JUST BEFORE WHERE username='$xmbuser'");
+--------------------------------------------------------------------------------
+, glowcolorstatus='$glowcolorstatus', hexcolorstatus='$hexcolorstatus', pphotostatus='$pphotostatus'
+--------------------------------------------------------------------------------
+
+* Edit viewthread.php
+
+FIND
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($post['hexcolor'] == "") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$post[hexcolor]";
+	$hexcolor2 = "color:#$post[hexcolor]";
+}
+
+if($post['glowcolor'] == "") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font	style=\"width:100%; $hexcolor2; filter:glow(color=#$post[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$post[username]$span2";
+
+$money = "<br>$lang[shop_currency]: $post[money]<br>";
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+// BEGIN SHOP HACK
+
+if($post['hexcolor'] == "" || $post['hexcolorstatus'] == "off") {
+	$hexcolor1 = "";
+	$hexcolor2 = "";
+} else {
+	$hexcolor1 = "#$post[hexcolor]";
+	$hexcolor2 = "color:#$post[hexcolor]";
+}
+
+if($post['glowcolor'] == "" || $post['glowcolorstatus'] == "off") {
+	$span1 = "<font color=\"$hexcolor1\">";
+	$span2 = "</font>";
+} else {
+	$span1 = "<font	style=\"width:100%; $hexcolor2; filter:glow(color=#$post[glowcolor], strength=2)\">";
+	$span2 = "</font>";
+}
+
+$username = "$span1$post[username]$span2";
+
+$money = "<br>$lang[shop_currency]: $post[money]<br>";
+
+// END SHOP HACK
+--------------------------------------------------------------------------------
+
+* Edit memcp_profile template
+
+FIND
+--------------------------------------------------------------------------------
+$dayselect
+<input type="text" name="year" size="4" value="$bday[2]" /></td>
+</tr>
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[shop_textglowingusername] ($lang[shop_textifpurchased]):</td>
+<td bgcolor="$altbg2" class="tablerow"><select name="glowcolorstatus">
+<option value="on" $glowcoloron>$lang[shop_texton]</option>
+<option value="off" $glowcoloroff>$lang[shop_textoff]</option>
+</select></td>
+</tr>
+
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[shop_textchangecolor] ($lang[shop_textifpurchased]):</td>
+<td bgcolor="$altbg2" class="tablerow"><select name="hexcolorstatus">
+<option value="on" $hexcoloron>$lang[shop_texton]</option>
+<option value="off" $hexcoloroff>$lang[shop_textoff]</option>
+</select></td>
+</tr>
+
+<tr>
+<td bgcolor="$altbg1" class="tablerow">$lang[shop_textpphoto] ($lang[shop_textifpurchased]):</td>
+<td bgcolor="$altbg2" class="tablerow"><select name="pphotostatus">
+<option value="on" $pphotoon>$lang[shop_texton]</option>
+<option value="off" $pphotooff>$lang[shop_textoff]</option>
+</select></td>
+</tr>
+--------------------------------------------------------------------------------

@@ -1,0 +1,190 @@
+TITLE:
+ - Most Online Ever
+
+RELEASE VERSION:
+ - 2.1
+
+RELEASE DATE:
+ - 29 March 2004; 06:42PM (CST)
+
+COMPATIBILITY:
+ - XMB v.1.9 (beta)
+ - XMB v.1.9 Final
+
+CODE DESIGNER:
+ - Original Coder:
+    - unknown
+ - Re-Release By:
+    - Jonathon of JDMnet ( jonathon@jdmnet.org | www.jdmnet.org )
+ - Modifications Also Done By:
+    - Snowfall
+
+COPYRIGHT:
+ - none
+
+DESCRIPTION:
+ - This mod adds a "most online ever" line onto your forums main page, so that you can keep track of how ment people have logged onto/been on your forums at one time.
+
+NOTES:
+ - Backup all templates, PHP files, and the database BEFORE proceeding.
+ - The long dashes are NOT part of the mod unless otherwise stated; the are there merely for seperation of the lines.
+ - This directions are based on a default/un-moddified XMB; some instructions may very if you have moddified your forums any.
+ - DO NOT upload any of the changes files until it specificaly says to.
+
+
+
+
+--==// STEP 1 //==--
+
+A] GO TO THE ADMINISTRATION PANEL; AND INSERT THE FOLLOWING IN THE "Insert Raw mysql" BOX :
+
+  !! here is the only part that changed !!
+
+------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `$table_mostonline`;
+CREATE TABLE `$table_mostonline` (
+  mostonlinetime INT(10) DEFAULT '' NULL,
+  mostonlinecount INT(10) DEFAULT '0'
+) TYPE=MyISAM;
+
+INSERT INTO `$table_mostonline` VALUES (1080588179, 1);
+
+------------------------------------------------------------------------------------
+
+B] SUBMIT CHANGES
+
+
+
+--==// STEP 2 //==--
+
+A] OPER YOUR "header.php" FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+$tables = array(
+
+------------------------------------------------------------------------------------
+
+C] AT THE END OF THAT LINE; FIND:
+
+------------------------------------------------------------------------------------
+
+);
+
+------------------------------------------------------------------------------------
+
+D] JUST BEFORE THAT; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+,'mostonline'
+
+------------------------------------------------------------------------------------
+
+E] SAVE CHANGES
+
+
+
+--==// STEP 3 //==--
+
+A] OPEN "index.php" FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+$onlinetotal = $guestcount + $membercount;
+
+------------------------------------------------------------------------------------
+
+C] BELOW THAT; ADD THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+        /* most online ever v.2.0 (for xmb v.1.9) - by jonathon & snowfall -- start */
+        $most_query1 = $db->query("SELECT * FROM $table_mostonline");
+        $mostonline1 = $db->fetch_array($most_query1);
+        
+        if($onlinetotal > $mostonline1['mostonlinecount']){
+            $db->query("UPDATE $table_mostonline SET mostonlinetime='".time()."', mostonlinecount='".$onlinetotal."'");
+        }
+        
+        $most_query2 = $db->query("SELECT * FROM $table_mostonline");
+        $mostonline2 = $db->fetch_array($most_query2);
+        
+        $most_date = gmdate($dateformat, $mostonline2['mostonlinetime'] + ($timeoffset * 3600) + ($addtime * 3600) + $daylightsavings);
+        $most_time = gmdate($timecode, $mostonline2['mostonlinetime'] + ($timeoffset * 3600) + ($addtime * 3600) + $daylightsavings);
+        
+        $most_text = ''.$lang['most_text1'].' '.$mostonline2['mostonlinecount'].' '.$lang['most_text2'].' '.$most_date.'; '.$most_time.'.';
+        /* most online ever v.2.0 (for xmb v.1.9) - by jonathon & snowfall -- end */
+
+------------------------------------------------------------------------------------
+
+D] SAVE CHANGES.
+
+
+
+--==// STEP 4 //==--
+
+A] OPEN YOUR LANG FILE
+
+B] FIND:
+
+------------------------------------------------------------------------------------
+
+?>
+
+------------------------------------------------------------------------------------
+
+C] BEFORE THAT; ADD IN THE FOLLOWING:
+
+------------------------------------------------------------------------------------
+
+$lang['most_text1'] = 'The most online ever was';
+$lang['most_text2'] = 'on';
+
+------------------------------------------------------------------------------------
+
+D] SAVE CHANGES
+
+
+
+--==// STEP 5 //==--
+
+A] UPLOAD ALL CHANGED FILES; WHICH ARE:
+
+ - header.php
+ - index.php
+ - And you lang file
+
+
+
+--==// STEP 6 //==--
+
+A] OPEN "index" TEMPLATE
+
+B] FIND
+
+------------------------------------------------------------------------------------
+
+$memhtml<br />
+
+------------------------------------------------------------------------------------
+
+C] JUST AFTER THAT ADD:
+
+------------------------------------------------------------------------------------
+
+$most_text<br />
+
+------------------------------------------------------------------------------------
+
+D] SAVE CHANGES
+
+
+AND YOU ARE NOW DONE!
+
+THE "MOST ONLINE" TEXT SHOULD APEAR TOWARDS THE BOTTOM OF YOUR FORUMS, JUST ABOVE THE STATS ON THE NEWEST MEMEBER - AND POST COUNTS, ETC.

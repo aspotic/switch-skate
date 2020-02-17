@@ -1,0 +1,253 @@
+TITLE:
+ - Moderators in Seperate Column
+
+RELEASE VERSION:
+ - 4.0.0
+
+RELEASE DATE:
+ - 30 October 2004; 10:50AM (CST)
+
+COMPATIBILITY:
+ - XMB v.1.9.1 Final
+ - XMB v.1.9.1 (RC3) [possibly]
+ - XMB v.1.9.1 (RC2) [possibly]
+ - XMB V.1.9.1 (RC1) [possibly]
+
+CODE DESIGNER:
+ - Jonathon of JDMnet ( jonathon@jdmnet.org | www.jdmnet.org )
+
+COPYRIGHT:
+ - Let the author (me, Jonathon) know when you post this mod on other forums for downloading
+
+DESCRIPTION:
+ - Makes it so that there is a new column - after the last post coulmn - that lists the moderators.
+
+NOTES:
+ - Backup all templates, PHP files, and the database BEFORE proceeding.
+ - Do not upload any files until told to do so.
+ - This version is specificaly for 1.9.1 Final and not any previous version of XMB
+ - The long dashes are NOT part of the mod unless otherwise stated; the are there merely for seperation of the lines.
+ - This directions are based on a default/un-moddified XMB; some instructions may very if you have moddified your forums any.
+
+
+
+
+--==// STEP 1 //==--
+
+A] OPEN THE "index" TEMPLATE
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="19%" class="header">$lang[textlastpost]</td>
+
+-------------------------------------------------------------------------------------------------
+
+C] BELOW THAT LINE; ADD THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="9%" class="header">$lang[textmodby2]</td>
+
+-------------------------------------------------------------------------------------------------
+
+D] SUBMIT CHANGES
+
+
+
+--==// STEP 2 //==--
+
+A] OPEN THE "index_category" TEMPLATE
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+colspan="6"
+
+-------------------------------------------------------------------------------------------------
+
+C] REPLACE THAT WITH THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+colspan="7"
+
+-------------------------------------------------------------------------------------------------
+
+D] SUBMIT CHANGES
+
+
+
+--==// STEP 3 //==--
+
+A] OPEN "index_forum" TEMPLATE
+
+B] FIND; AND DELETE THE FOLLOWING LINE:
+
+-------------------------------------------------------------------------------------------------
+
+&nbsp;<font class="smalltxt">$forum[moderator]</font>
+
+-------------------------------------------------------------------------------------------------
+
+C] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg1" class="rghttablerow" width="19%">$lastpostrow</td>
+
+-------------------------------------------------------------------------------------------------
+
+D] BELOW THAT LINE; ADD THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg2" class="tablerow" width="9%"><font class="smalltxt">$forum[moderator]</font></td>
+
+-------------------------------------------------------------------------------------------------
+
+E] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg2" class="ctrtablerow" width="2%">
+
+-------------------------------------------------------------------------------------------------
+
+F] REPLACE THAT; WITH THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg1" class="ctrtablerow" width="2%">
+
+-------------------------------------------------------------------------------------------------
+
+G] SUBMIT CHANGES
+
+
+
+--==// STEP 4 //==--
+
+A] OPEN "forumdisplay_subforum" TEMPLATE (THE ONE _WITHOUT_ THE "s" AT THE END)
+
+B] FIND AND DELETE THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+&nbsp;<font class="smalltxt">$forum[moderator]</font>
+
+-------------------------------------------------------------------------------------------------
+
+C] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg1" class="tablerow"><font size="1" face="verdana">$lastpostrow</font></td>
+
+-------------------------------------------------------------------------------------------------
+
+D] BELOW THAT LINE; ADD THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td bgcolor="$altbg2" class="tablerow"><font class="smalltxt">$forum[moderator]</font></td>
+
+-------------------------------------------------------------------------------------------------
+
+E] SUBMIT CHANGES
+
+
+
+--==// STEP 5 //==--
+
+A] OPEN "forumdisplay_subforumS" TEMPLATE (THE ONE _WITH_ THE "s" AT THE END)
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="58%" class="header">$lang[textforum]</td>
+
+-------------------------------------------------------------------------------------------------
+
+C] REPLACE THAT; WITH THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="56%" class="header">$lang[textforum]</td>
+
+-------------------------------------------------------------------------------------------------
+
+D] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="19%" class="header">$lang[textlastpost]</td>
+
+-------------------------------------------------------------------------------------------------
+
+E] BELOW THAT LINE; ADD THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+<td width="9%" class="header">$lang[textmodby2]</td>
+
+-------------------------------------------------------------------------------------------------
+
+F] SUBMIT CHANGES
+
+
+
+--==// STEP 6 //==--
+
+A] OPEN YOUR LANG FILE
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+?>
+
+-------------------------------------------------------------------------------------------------
+
+C] ABOVE THAT LINE; ADD THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+$lang['textmodby2'] = 'Moderators:';
+
+-------------------------------------------------------------------------------------------------
+
+D] SAVE CHANGES; AND UPLOAD OVER YOUR OLD LANG FILE.
+
+
+
+--==// STEP 7 //==--
+
+A] OPEN THE "functions.php" FILE
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+            $forum['moderator'] = implode(', ', $forum['moderator']);
+
+            $forum['moderator'] = '('.$lang['textmodby'].' '.$forum['moderator'].')';
+
+-------------------------------------------------------------------------------------------------
+
+C] REPLACE THOS LINE; WITH THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+// MODIFIED FOR "Moderators in Seperate Column v.4.0.0" MOD - START
+            $forum['moderator'] = implode(',<br />', $forum['moderator']);
+
+            $forum['moderator'] = $forum['moderator'];
+// MODDIFIED FOR "Moderators in Seperate Column v.4.0.0" MOD - END
+
+-------------------------------------------------------------------------------------------------
+
+D] SAVE CHANGES; AND UPLOAD OVER YOUR OLD "functions.php" FILE.

@@ -1,0 +1,48 @@
+Description: This addon adds links in member profiles and posts to send money.
+
+Compatibility: XMB v1.9.1 Final
+
+Code Designed By: nfpunk/Flixon
+
+* Edit shop_bank.php
+
+FIND
+--------------------------------------------------------------------------------
+$sendoptions .= "<option value=\"$member[uid]\">$member[username]</option>\n";
+--------------------------------------------------------------------------------
+
+REPLACE WITH
+--------------------------------------------------------------------------------
+if(isset($username) && $username == $member['username']) {
+	$sendoptions .= "<option value=\"$member[uid]\" selected>$member[username]</option>\n";
+} else {
+	$sendoptions .= "<option value=\"$member[uid]\">$member[username]</option>\n";
+}
+--------------------------------------------------------------------------------
+
+* Edit member_profile template
+
+FIND
+--------------------------------------------------------------------------------
+(<a href="#"
+onclick="Popup('u2u.php?action=send&amp;username=$encodeuser', 'Window', 700, 450);">$lang[textu2u]</a>)&nbsp;
+--------------------------------------------------------------------------------
+
+ADD AFTER
+--------------------------------------------------------------------------------
+(<a href="shop_bank.php?action=send&amp;username=$encodeuser">$lang[shop_textsendmoney]</a>)&nbsp;
+--------------------------------------------------------------------------------
+
+* Edit viewthread_post template
+
+FIND
+--------------------------------------------------------------------------------
+$yahoo
+--------------------------------------------------------------------------------
+
+ADD AFTER
+--------------------------------------------------------------------------------
+<a href="shop_bank.php?action=send&amp;username=$encodename"><img src="$imgdir/send.gif" border="0" alt="$lang[shop_textsendmoney]" /></a>
+--------------------------------------------------------------------------------
+
+* You now have to upload send.gif to your chosen themes image directory.

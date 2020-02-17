@@ -1,0 +1,8 @@
+Credits:
+
+There are tons of people to thank for the portal system.
+Most notable is the original portal author eregi.
+XMBHacks.co.uk for taking on eregi's project and furthering it.
+John Briggs & Eagle1 for making the Template version.
+Splen and Xian for carrying on the Template version and making wonderful addons.
+Freewill46 for furthering it with new controls.

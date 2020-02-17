@@ -1,0 +1,99 @@
+HOW-TO: Create new blocks
+
+Step 1: Administration Panel -> Portal Admin -> Add Portal Blocks
+
+Select a name for your block. This should be simple, and easy to identify what the block does.
+Make sure you don't use any duplicate names.
+
+Step 2: The contents
+
+The contents of the block is basic HTML. You need to make sure you close all <table>, <tr>, and <td> tags.
+
+
+Step 3: Portal Display Order
+
+This is similar to the display order of the forums. Just put there whichever order you want it to appear.
+You will need to compare this number with the other blocks so that you do not have any duplicates.
+
+Step 4: Portal Display Direction
+
+This is quite simply, which side of the portal do you want this to display. Left, Center, or Right.
+
+Step 5: Portal Block Status
+
+Enabled or Disabled. If enabled, then the block will show in the portal, otherwise it will not.
+
+Step 6:
+
+when you make a new portal block you must add the portal block name to the loadtemplates(); function in portal.php
+
+Example:
+
+, 'portal_websearch'
+
+Add After:
+
+, 'portal_blockname'
+
+
+The basic layout of a new block is:
+
+
+-------------------------------------------------------------------------------
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="$bordercolor">
+<tr>
+<td>
+<table border="0" cellspacing="$borderwidth" cellpadding="$tablespace" width="100%">
+<tr>
+<td class="category"><strong><font color="$cattext">&raquo; *****INSERT THE TITLE OF THE BLOCK HERE*****</font></strong></td>
+</tr>
+<tr>
+<td bgcolor="$altbg2" class="tablerow">
+<font class="mediumtxt">
+
+***********INSERT THE TEXT OF THE BLOCK HERE************
+
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+-------------------------------------------------------------------------------
+
+Of course, they can be more or less complex as you want them to be.
+
+
+***Do you need PHP code within the block?***
+
+If you need to add custom PHP code for your block, then add it in portal.php above the following:
+
+-------------------------------------------------------------------------------
+$portalquery = $db->query("SELECT p.*, t.* FROM ".$tablepre."portal_templates p LEFT JOIN $table_templates t ON t.name = p.name WHERE p.status = 'on' ORDER BY p.displayorder ASC  LIMIT 0 , 30");
+while ($block = $db->fetch_array($portalquery)) {
+	if ($block['direction'] == 'center' && $block['status'] == 'on' && $block['displayorder'] == $block['displayorder']) {
+		eval("\$center[] = \"".template("$block[name]")."\";");
+	} elseif ($block['direction'] == 'right' && $block['status'] == 'on' && $block['displayorder'] == $block['displayorder']) {
+		eval("\$right[] = \"".template("$block[name]")."\";");
+	} elseif ($block['direction'] == 'left' && $block['status'] == 'on' && $block['displayorder'] == $block['displayorder']) {
+		eval("\$left[] = \"".template("$block[name]")."\";");
+	}
+}
+$centerblock = implode("<br />", $center);
+$rightblock = implode("<br />", $right);
+$leftblock = implode("<br />", $left);
+
+eval('echo stripslashes("'.template('portal_home').'");');
+
+eval("echo (\"".template('padmin_copyright')."\");");
+
+end_time();
+
+eval("echo (\"".template('footer')."\");");
+?>
+-------------------------------------------------------------------------------
+
+
+All done!

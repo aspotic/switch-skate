@@ -1,0 +1,15 @@
+/*
+	SHOP HACK v1.3 by NFPUNK/FLIXON
+
+	If you require support please post in the forum
+	at www.flixon.com/shop/forum.  Thanks
+
+	- nfpunk/Flixon
+*/
+
+UPGRADE:
+========
+
+* If you have this installed on a XMB v1.9 (or lower) and wish to upgrade to XMB v1.9.1 then
+  simply follow the instructions in the Installation.txt file in but when asked to run the
+  install.php run the upgrade.php file instead.

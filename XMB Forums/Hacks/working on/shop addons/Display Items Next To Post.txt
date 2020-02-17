@@ -1,0 +1,64 @@
+Description: This addon will display items purchased next to members posts.
+
+Compatibility: XMB v1.9.1 Final
+
+Code Designed By: nfpunk/Flixon
+
+* Edit viewthread.php
+
+FIND
+--------------------------------------------------------------------------------
+if($post['author'] != "Anonymous") {
+--------------------------------------------------------------------------------
+
+ADD BELOW
+--------------------------------------------------------------------------------
+$items = "";
+$numitems = 0;
+$maxitems = 100; // Change this number to limit the number of items displayed per member
+
+$itemsquery = $db->query("SELECT i.itemname, i.imageurl, m.* FROM $table_shop_items i, $table_member_items m WHERE m.uid='$post[uid]' && i.id=m.iid ORDER BY i.itemname");
+
+while($memberitem = $db->fetch_array($itemsquery)) {
+	if($memberitem['quantity'] > 1) {
+		$itemquantity = "(* $memberitem[quantity])";
+	} else {
+		$itemquantity = "";
+	}
+
+	if($numitems <= $maxitems) {
+		if($memberitem['imageurl'] == "") {
+			$items .= "<img src=\"images/shop/noitempic.gif\" border=\"0\" alt=\"$memberitem[itemname]\"> $itemquantity "; // You may wish to change this
+		} else {
+			$items .= "<img src=\"$memberitem[imageurl]\" border=\"0\" alt=\"$memberitem[itemname]\"> $itemquantity ";
+		}
+	}
+
+	$numitems++;
+}
+
+$db->free_result($itemsquery);
+
+if($numitems > $maxitems) {
+	$encodename = urlencode($post['author']);
+	$morelink = "<a href=\"member.php?action=viewpro&amp;member=$encodename\">...</a>";
+} else {
+	$morelink = "";
+}
+
+if($items != "") {
+	$items = "<br><br>$lang[shop_textitems]: $items $morelink";
+}
+--------------------------------------------------------------------------------
+
+* Edit viewthread_post template
+
+FIND
+--------------------------------------------------------------------------------
+$mood
+--------------------------------------------------------------------------------
+
+ADD AFTER
+--------------------------------------------------------------------------------
+$items
+--------------------------------------------------------------------------------

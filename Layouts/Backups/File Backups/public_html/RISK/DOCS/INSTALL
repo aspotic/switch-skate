@@ -1,0 +1,32 @@
+// PHP RiSK -- INSTALL GUIDE //
+
+Server Side Requirements : 
+
+- Apache 2  (or other web server that supports PHP)
+- PHP 4.3.2 (only version tested, other versions may work)
+- MySQL 4.0.16 (only version tested, other versions may work)
+
+Client Side Requirements :
+
+- Internet Explorer 5.5 or higher
+OR
+- Any web browser that fully supports Iframes, CSS and JavaScript.
+
+Instructions : 
+
+- Untar/Unzip the risk/ folder to a directory on your web server.
+- Edit the config.inc.php file to the values for your server.
+- Ensure that your web server has write access to your logs folder
+- Load the risk.sql file into your database
+- Manually add an entry in the risk_players table:
+  -- Username     = your username
+  -- Password     = password('yourpassword')
+  -- Level        = 3
+  -- E-mail       = your e-mail address
+  -- Other fields = blank (defaults)
+
+  OR
+
+  -- Load the index.php, click on Register, fill out the form
+  -- Run the followin query in MySQL
+     "UPDATE risk_players SET level='3' WHERE username='yourusername';"

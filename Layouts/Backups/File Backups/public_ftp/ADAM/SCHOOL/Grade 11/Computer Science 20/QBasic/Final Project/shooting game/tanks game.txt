@@ -1,0 +1,168 @@
+'****************
+'***Adam Knox****
+'****************
+'*Water Balloons*
+'****************
+
+DECLARE SUB mult ()
+DECLARE SUB pro ()
+DECLARE SUB hard ()
+DECLARE SUB easy ()
+
+CLS : SCREEN 12
+
+PRINT "Water Balloons"
+PRINT
+PRINT
+PRINT "The point of this game is to shoot your enemy 10 times to win"
+PRINT "You must try not to get hit"
+PRINT "You may not cross the center line"
+PRINT
+INPUT "Do you have a (s)low or (f)ast computer"; speed$
+IF speed$ = "f" THEN
+  km = 70000
+ gkm = 7000
+ bkm = 40000
+g2km = 0
+ELSEIF speed$ = "s" THEN
+  km = 3000
+ gkm = 1000
+ bkm = 2000
+g2km = 0
+ELSE END
+END IF
+
+10
+CLS : SCREEN 12
+
+PRINT "MENU"
+PRINT
+PRINT "1)Multiplayer"
+PRINT "2)Single Player"
+PRINT "3)Continue Game"
+PRINT "4)Cheats"
+PRINT "5)Exit"
+PRINT
+INPUT decide
+IF decide = 1 THEN GOTO 50
+IF decide = 2 THEN GOTO 60
+IF decide = 3 THEN GOTO 70
+IF decide = 4 THEN GOTO 80
+IF decide = 5 THEN END
+IF decide > 5 OR decide < 1 THEN GOTO 10
+END
+
+50
+CLS : SCREEN 12
+INPUT "Name for first player"; name1$
+INPUT "Name for second player"; name2$
+
+CLS : SCREEN 12
+PRINT name1$; " is on the bottom"
+PRINT name1$; " uses the keypad on the right of the keyboard and their keys are"
+PRINT
+PRINT "5 = Fire"
+PRINT "8 = Up"
+PRINT "2 = Down"
+PRINT "4 = Left"
+PRINT "6 = Right"
+PRINT
+PRINT name2$; " is on the top"
+PRINT name2$; " uses these keys"
+PRINT
+PRINT "Space Bar = Fire"
+PRINT "t = Up"
+PRINT "g = Down"
+PRINT "f = Left"
+PRINT "h = Right"
+PRINT
+PRINT
+INPUT "Are you ready to start (y)es/(n)o"; start$
+IF start$ = "y" THEN a = a'CALL mult
+IF start$ = "Y" THEN b = b'CALL mult
+END
+
+
+60
+CLS
+PRINT "In single player you are the bottom player"
+PRINT "You use the keypad on the right of your keypad"
+PRINT
+PRINT "Ther are three difficulties. Easy and Hard"
+PRINT "On each difficulty you must pass 10 levels to beat the game"
+PRINT "After beating each level you will recieve a cheat or tip"
+PRINT "The cheat can be used on that difficulty only"
+PRINT
+PRINT "In easy it is just you against the computer"
+PRINT "In hard you have to face other guns the go off every once in a while"
+PRINT
+INPUT "What do you want (e)asy, (h)ard, and (p)ro"; picking$
+IF picking$ = "e" THEN a = a'CALL selfe
+IF picking$ = "E" THEN b = b'CALL selfe
+IF picking$ = "h" THEN c = c'CALL selfh
+IF picking$ = "H" THEN d = d'CALL selfh
+IF picking$ = "p" THEN c = c'CALL selfh
+IF picking$ = "P" THEN d = d'CALL selfh
+END
+
+70
+
+CLS : SCREEN 12
+
+PRINT "CONTINUE GAME"
+PRINT
+INPUT "Please type in the key code for the level you are on"; level%
+
+IF level% = 9385 THEN CALL easy
+IF level% = 7578 THEN CALL easy
+IF level% = 1298 THEN CALL easy
+IF level% = 6262 THEN CALL easy
+IF level% = 7264 THEN CALL easy
+IF level% = 9553 THEN CALL easy
+IF level% = 3734 THEN CALL easy
+IF level% = 7547 THEN CALL easy
+IF level% = 9374 THEN CALL easy
+
+IF level% = 9315 THEN CALL hard
+IF level% = 7598 THEN CALL hard
+IF level% = 1228 THEN CALL hard
+IF level% = 6282 THEN CALL hard
+IF level% = 7234 THEN CALL hard
+IF level% = 9573 THEN CALL hard
+IF level% = 3744 THEN CALL hard
+IF level% = 7567 THEN CALL hard
+IF level% = 9354 THEN CALL hard
+
+IF level% = 9389 THEN CALL pro
+IF level% = 7578 THEN CALL pro
+IF level% = 1292 THEN CALL pro
+IF level% = 6261 THEN CALL pro
+IF level% = 7267 THEN CALL pro
+IF level% = 9556 THEN CALL pro
+IF level% = 3733 THEN CALL pro
+IF level% = 7544 THEN CALL pro
+IF level% = 9375 THEN CALL pro
+
+80
+CLS : SCREEN 12
+PRINT "CHEATS"
+PRINT
+INPUT "Type in a cheat you want to use"; cheat%
+IF cheat% = 87734 THEN f = f
+GOTO 10
+
+
+
+
+SUB easy
+END SUB
+
+SUB hard
+END SUB
+
+SUB mult
+END SUB
+
+SUB pro
+END SUB
+

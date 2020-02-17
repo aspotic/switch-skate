@@ -1,0 +1,93 @@
+Code Name: Mood Changer - Build: 20040910 - Version: 3 # SimsHsia #
+
+
+-- FIND IN INDEX.PHP --
+
+
+eval("echo (\"".template('header')."\");");
+
+
+-- ADD BELOW --
+
+
+// BEGIN MOODCHANGER HACK 
+if($moodchange != "") { 
+$mood = $moodchange; 
+$mood = addslashes($mood); 
+$db->query("UPDATE $table_members SET mood = '$mood' WHERE username = '$xmbuser'"); 
+$moodchanger = "$lang[moodchanged] </td></tr>"; 
+} else { 
+$query = $db->query("SELECT mood FROM $table_members WHERE username = '$xmbuser'"); 
+$mood = $db->fetch_array($query); 
+$moodchanger = "<script language='JavaScript'> 
+function clearForm() { 
+if(document.MoodChangeForm.moodchange.value=='$mood[mood]') { 
+document.MoodChangeForm.moodchange.value=''; 
+} 
+} 
+</script>"; 
+$mood['mood'] = stripslashes($mood['mood']); 
+$moodchanger .= "<form name=\"MoodChangeForm\" method=\"post\" action=\"index.php\">$lang[newmood] <input type=\"text\" name=\"moodchange\" class=\"moodchangercss\" size=\"15\" maxlength=\"15\" value=\"$mood[mood]\" onFocus='clearForm();' /> <input type=\"submit\" class=\"moodchangercss\" name=\"moodchangersubmit\" value=\"$lang[changemood]\" /></td></tr></form>"; 
+} 
+//END MOODCHANGER HACK
+
+
+
+-- SAVE AND RE-UPLOAD --
+
+
+
+-- FIND IN ENGLISH.LANG.PHP --
+
+
+?>
+
+
+-- ADD ABOVE --
+
+
+$lang['moodchanged'] = "Thank you, Your Mood has been updated.";
+$lang['newmood'] = "$xmbuser\'\s current Mood for Today is:";
+$lang['changemood'] = "Update My Mood";
+
+
+-- SAVE AND RE-UPLOAD --
+
+
+
+-- FIND IN INDEX_WELCOME_MEMBER TEMPLATE --
+
+
+<td align="center" width="33%"><a href="#" onclick="Popup('buddy.php', 'Window', 450, 400);"><strong>$lang[launchbuddylist]</strong></a></td>
+
+
+-- ADD BELOW --
+
+
+<tr class="tablerow" bgcolor="$altbg1"><td align="center" colspan="3">$moodchanger
+
+
+
+-- CLICK SUBMIT CHANGES ---
+
+
+
+-- FIND IN CSS TEMPLATE --
+
+
+</style>
+
+
+-- ADD ABOVE --
+
+
+.moodchangercss { 
+font-family: Verdana, arial, helvetica, sans-serif; 
+font-size: 10px; 
+font-weight: normal; 
+background-color: $altbg1; 
+color: $tabletext; 
+} 
+
+
+-- CLICK SUBMIT CHANGES --

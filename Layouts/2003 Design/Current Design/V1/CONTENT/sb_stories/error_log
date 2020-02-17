@@ -1,0 +1,1 @@
+[24-Aug-2004 21:46:42] PHP Warning:  mysql_fetch_row(): supplied argument is not a valid MySQL result resource in /home/skate/public_html/content/sb_stories/index.php on line 38

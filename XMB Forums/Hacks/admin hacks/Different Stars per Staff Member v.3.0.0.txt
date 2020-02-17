@@ -1,0 +1,89 @@
+TITLE:
+ - Different "Stars" per Staff Member
+
+RELEASE VERSION:
+ - 3.0.0
+
+RELEASE DATE:
+ - 07 November 2004; 12:09PM (CST)
+
+COMPATIBILITY:
+ - XMB v.1.9.1 Final
+ - XMB v.1.9.1 (RC3) [possibly]
+ - XMB v.1.9.1 (RC2) [possibly]
+ - XMB V.1.9.1 (RC1) [possibly]
+
+CODE DESIGNER:
+ - Jonathon of JDMnet ( jonathon@jdmnet.org | www.jdmnet.org )
+
+COPYRIGHT:
+ - Let the author (me, Jonathon) know when you post this mod on other forums for downloading
+
+DESCRIPTION:
+ - Makes it so that the Admin, Super Admin, Moderator, and Super Moderator; each have a different "star" that shows up under their name in posts.
+ - All regular members still have the default stars.
+
+NOTES:
+ - Backup all templates, PHP files, and the database BEFORE proceeding.
+ - Do not upload any files until told to do so.
+ - This version is specificaly for 1.9.1 Final and not any previous version of XMB
+ - The long dashes are NOT part of the mod unless otherwise stated; the are there merely for seperation of the lines.
+ - This directions are based on a default/un-moddified XMB; some instructions may very if you have moddified your forums any.
+
+
+
+
+--==// STEP 1 //==--
+
+A] OPEN THE "viewthread.php" FILE
+
+B] FIND:
+
+-------------------------------------------------------------------------------------------------
+
+            $stars          = str_repeat("<img src=\"" .$imgdir. "/star.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+
+-------------------------------------------------------------------------------------------------
+
+C] REPLACE THAT LINE; WITH THE FOLLOWING:
+
+-------------------------------------------------------------------------------------------------
+
+// ADDED IN FOR "Different "Stars" per Staff Member V.3.0.0" MOD - start
+            $stars = '';
+            if ( $post['status'] == 'Super Administrator' ) {
+                $stars = str_repeat("<img src=\"images/star_supadmin.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+            } elseif ( $post['status'] == 'Administrator' ) {
+                $stars = str_repeat("<img src=\"images/star_admin.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+            } elseif ( $post['status'] == 'Super Moderator' ) {
+                $stars = str_repeat("<img src=\"images/star_supmod.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+            } elseif ( $post['status'] == 'Moderator' ) {
+                $stars = str_repeat("<img src=\"images/star_mod.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+            } else {
+                $stars = str_repeat("<img src=\"" .$imgdir. "/star.gif\" alt=\"*\" />", $rank['stars']) . '<br />';
+            }
+// ADDED IN FOR "Different "Stars" per Staff Member V.3.0.0" MOD - end
+
+-------------------------------------------------------------------------------------------------
+
+D] SAVE CHANGES AND UPLOAD OVER OLD "viewthread.php" FILE.
+
+
+
+--==// STEP 2 //==--
+
+A] CREATE FOUR NEW IMAGES WITH THE FOLLOWING NAMES:
+
+ - star_supadmin.gif
+ - star_admin.gif
+ - star_supmod.gif
+ - star_mod.gif
+
+   THESE WILL BE USED AS "STARS".
+
+B] UPLOAD THESE FILES TO THE FOLDER NAMED "images".
+
+
+
+Now, everything should be working fine.
+Go view a thread and you should see a different star listed for admin, moderators, etc.

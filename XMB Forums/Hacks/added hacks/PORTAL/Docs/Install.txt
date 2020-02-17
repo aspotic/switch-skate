@@ -1,0 +1,197 @@
+Mod Title: Portal System v1.0
+
+Mod Author: John Briggs
+
+How To Guide By: huskysgrl
+
+Additonal Thanks: Please read Credits.txt
+
+Last Updated: 11/09/04
+
+Mod Description:
+This mod will add a portal system interface section to your forum.
+
+Supported Version: XMB 1.9.1 Nexus Final
+
+Installation Note: Before adding this mod to your forum, you should back up all files related to this mod.
+
+License Note: This mod is released under the GPL License.
+
+Author Note:
+For security purposes, Please Check: http://www.xmbxtreme.com for the latest version of this mod.
+Downloading this mod from other sites could cause malicious code to enter into your XMB Forum software.
+As such, XMBXtreme.com will not offer support for mod's not offered in our mod forum.
+
+=======================================================================================================================
+=======
+Step 1:
+=======
+
+Please upload the following files to your forum directory.
+
+"portal.php", "portal_cp.php", "portal.xmb"
+
+=======================================================================================================================
+=======
+Step 2:
+=======
+
+Please upload the following file to your forum "/lang/" folder.
+
+"English.portal.php"
+
+=======================================================================================================================
+=======
+Step 3:
+=======
+
+Please upload the following file to your forum "/include/" folder.
+
+"portal.inc.php"
+
+=======================================================================================================================
+=======
+Step 4:
+=======
+
+=================================
+Edit File: /lang/English.lang.php
+=================================
+
+==========
+Find Code:
+==========
+
+$charset = 'ISO-8859-1';
+
+===============
+Add Code Below:
+===============
+
+// Portal System v1.0 Mod Begin
+include('./lang/English.portal.php');
+// Portal System v1.0 Mod End
+
+=======================================================================================================================
+=======
+Step 5:
+=======
+
+Please upload the following image to all your theme folders.
+
+"portal.gif"
+
+=======================================================================================================================
+=======
+Step 6:
+=======
+
+=====================
+Edit File: header.php
+=====================
+
+==========
+Find Code:
+==========
+
+    // 'Forum Rules'-link
+    if ( $SETTINGS['bbrules'] == "on") {
+        $links[] = "<img src=\"$imgdir/bbrules.gif\" alt=\"$lang[altrules]\" border=\"0\" /> <a href=\"faq.php?page=forumrules\"><font class=\"navtd\">$lang[textbbrules]</font></a>";
+    }
+
+===============
+Add Code Below:
+===============
+
+    // Portal System v1.0 Mod Begin
+    if ($SETTINGS['portalstatus'] == 'on') {
+        $links[] = "<img src=\"$imgdir/portal.gif\" alt=\"$lang[portalnav]\" title=\"$lang[portalnav]\" border=\"0\" /> <a href=\"portal.php\"><font class=\"navtd\">$lang[portalnav]</font></a>";
+    }
+    // Portal System v1.0 Mod End
+
+=======================================================================================================================
+=======
+Step 7:
+=======
+
+======================================
+Edit File: /inlcude/admin.user.inc.php
+======================================
+
+==========
+Find Code:
+==========
+
+    &raquo;&nbsp;<a href="cp2.php?action=themes"><?php echo $lang['themes']?></a><br />
+
+===============
+Add Code Below:
+===============
+
+	<!-- Portal System v1.0 Mod Begin -->
+	&raquo;&nbsp;<a href="portal_cp.php"><?php echo $lang['portalcp']?></a><br />
+	<!-- Portal System v1.0 Mod End -->
+
+=======================================================================================================================
+=======
+Step 8:
+=======
+
+===================
+Edit File: misc.php
+===================
+
+==========
+Find Code:
+==========
+
+    } elseif (false !== strpos($url, "/cp.php") || false !== strpos($url, "/cp2.php") || false !== strpos($url, '/u2uadmin.php')) {
+
+==================
+Replace Code With:
+==================
+
+    } elseif (false !== strpos($url, "/cp.php") || false !== strpos($url, "/cp2.php") || false !== strpos($url, '/u2uadmin.php') || false !== strpos($url, '/portal_cp.php')) {
+
+==========
+Find Code:
+==========
+
+    } elseif (false !== strpos($url, "/topicadmin.php")) {
+        $location = $lang['onlinetopicadmin'];
+
+===============
+Add Code Below:
+===============
+
+	// Portal System v1.0 Mod Begin
+    } elseif (false !== strpos($url, "/portal.php")) {
+        $location = $lang['portalonline'];
+    // Portal System v1.0 Mod End
+
+=======================================================================================================================
+=======
+Step 9:
+=======
+
+Please run install.php from your forum directory.
+
+Example: http://www.yourdomain.ext/yourforum/install.php
+
+=======================================================================================================================
+========
+Step 10:
+========
+
+Please DELETE!! the following files from your "forum" directory if they still exist.
+
+"install.php", "portal.xmb"
+
+=======================================================================================================================
+========
+Step 11:
+========
+
+To learn how to create new portal blocks please read the provided text file named "How_To.txt".
+
+=======================================================================================================================
